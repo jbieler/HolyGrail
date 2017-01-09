@@ -1,4 +1,4 @@
-package camsettings;
+package com.github.jbieler.holygrail.camsettings;
 
 import org.junit.Test;
 
