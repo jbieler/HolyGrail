@@ -14,13 +14,14 @@ public class TestLuminanceExposureCalculation {
     @Test
     public void TestLuminanceExposureCalculation() throws IOException {
         ExposureCalculation exposure = new LuminanceExposureCalculation();
-        double exposureValue = exposure.exposureOf(testImage());
+        double exposureValue = exposure.exposureOf(testImage("black.jpg"));
         assertTrue(exposureValue > -1);
         assertTrue(exposureValue < 1);
     }
 
-    private BufferedImage testImage() throws IOException {
-        File f = new File("/image.jpg");
-        return ImageIO.read(f);
+    private BufferedImage testImage(String imageName) throws IOException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource(imageName).getFile());
+        return ImageIO.read(file);
     }
 }
