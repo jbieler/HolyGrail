@@ -12,6 +12,9 @@ public class TimelapseAlgorithm {
     private ExposureAdjustment exposureAdjustment;
     private Camera camera;
 
+    private double baselineExposure;
+    private static final double EPSILON = 0.1;
+
     public TimelapseAlgorithm(Camera camera, ExposureCalculation exposureCalculation,
                               ExposureAdjustment exposureAdjustment) {
 
@@ -21,20 +24,31 @@ public class TimelapseAlgorithm {
 
     }
 
+    public void calculateBaselineExposure() {
+        baselineExposure = exposureOfLastImage();
+    }
+
     public void trackExposure() {
-        BufferedImage lastImage = camera.lastTakenImage();
-        CameraSettings currenSettings = camera.cameraSettings();
-        double exposure = exposureCalculation.exposureOf(lastImage);
+
+        CameraSettings currentSettings = camera.cameraSettings();
         CameraSettings adjustedSettings;
 
-        if (exposure < 0) {
-            adjustedSettings = exposureAdjustment.lighter(currenSettings);
-        } else if (exposure > 0) {
-            adjustedSettings = exposureAdjustment.darker(currenSettings);
+        double exposure = exposureOfLastImage();
+        double exposureDelta = exposure - baselineExposure;
+
+        if (exposureDelta > EPSILON) {
+            adjustedSettings = exposureAdjustment.darker(currentSettings);
+        } else if (exposureDelta < -EPSILON) {
+            adjustedSettings = exposureAdjustment.lighter(currentSettings);
         } else {
-            adjustedSettings = currenSettings;
+            adjustedSettings = currentSettings;
         }
 
         camera.adjustCameraSettings(adjustedSettings);
+    }
+
+    private double exposureOfLastImage() {
+        BufferedImage lastImage = camera.lastTakenImage();
+        return exposureCalculation.exposureOf(lastImage);
     }
 }

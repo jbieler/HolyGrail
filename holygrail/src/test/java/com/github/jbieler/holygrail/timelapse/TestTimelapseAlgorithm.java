@@ -4,6 +4,7 @@ import com.github.jbieler.holygrail.camera.Camera;
 import com.github.jbieler.holygrail.camsettings.CameraSettings;
 import com.github.jbieler.holygrail.exposure.ExposureCalculation;
 import com.github.jbieler.holygrail.exposure.LuminanceExposureCalculation;
+import com.github.jbieler.holygrail.exposure.MockExposure;
 import org.junit.Test;
 import org.mockito.stubbing.Answer;
 
@@ -20,7 +21,7 @@ public class TestTimelapseAlgorithm {
     @Test
     public void testTimelapseAlgorithm() throws IOException {
         Camera camera = mock(Camera.class);
-        ExposureCalculation exposureCalculation = mock(ExposureCalculation.class);
+        ExposureCalculation exposureCalculation = MockExposure.newIncrementingExposure(0.3, 0.06);
         ExposureAdjustment exposureAdjustment = mock(ExposureAdjustment.class);
         BufferedImage image = mock(BufferedImage.class);
         CameraSettings cameraSettings = mock(CameraSettings.class);
@@ -29,11 +30,15 @@ public class TestTimelapseAlgorithm {
         when(camera.cameraSettings()).thenReturn(cameraSettings);
 
         TimelapseAlgorithm timelapseAlgorithm = new TimelapseAlgorithm(camera, exposureCalculation, exposureAdjustment);
+        timelapseAlgorithm.calculateBaselineExposure();
+
         timelapseAlgorithm.trackExposure();
 
-        //verify(exposureAdjustment, times(1)).darker(  );
+        verify(camera).adjustCameraSettings(any(CameraSettings.class));
 
+        timelapseAlgorithm.trackExposure();
 
+        verify(exposureAdjustment).darker(any(CameraSettings.class));
+        verify(camera, times(2)).adjustCameraSettings(any(CameraSettings.class));
     }
-
 }
