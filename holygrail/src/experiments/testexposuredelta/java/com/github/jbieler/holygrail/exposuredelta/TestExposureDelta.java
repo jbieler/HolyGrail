@@ -15,15 +15,15 @@ import java.util.List;
 public class TestExposureDelta {
 
     @Test
-    @Ignore
     public void testExposureDelta() throws IOException {
         String[] filenames = new String[]{"000.jpg", "001.jpg", "002.jpg", "003.jpg", "004.jpg", "005.jpg",
-                "006.jpg", "007.jpg"};
+                "006.jpg", "007.jpg", "008.jpg", "009.jpg", "010.jpg", "011.jpg", "012.jpg"};
+
         List<Double> exposures = new ArrayList<Double>();
         ExposureCalculation exposureCalculation = new LuminanceExposureCalculation();
 
         for (String fname : filenames) {
-            exposures.add(exposureCalculation.exposureOf(testImage(fname)));
+            exposures.add(exposureCalculation.exposureOf(testImage("exposure-ranges/scene-3/" + fname)));
         }
 
         System.out.println("Exposures: " + exposures);
