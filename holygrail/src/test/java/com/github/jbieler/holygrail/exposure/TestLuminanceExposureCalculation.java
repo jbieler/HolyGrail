@@ -12,11 +12,17 @@ import static org.junit.Assert.assertTrue;
 public class TestLuminanceExposureCalculation {
 
     @Test
-    public void TestLuminanceExposureCalculation() throws IOException {
+    public void TestLuminanceExposureCalculationWithBlackImage() throws IOException {
         ExposureCalculation exposure = new LuminanceExposureCalculation();
         double exposureValue = exposure.exposureOf(testImage("black.jpg"));
-        assertTrue(exposureValue > -1);
-        assertTrue(exposureValue < 1);
+        assertTrue(exposureValue == 0);
+    }
+
+    @Test
+    public void TestLuminanceExposureCalculationWithWhiteImage() throws IOException {
+        ExposureCalculation exposure = new LuminanceExposureCalculation();
+        double exposureValue = exposure.exposureOf(testImage("white.jpg"));
+        assertTrue(exposureValue == 1);
     }
 
     private BufferedImage testImage(String imageName) throws IOException {
