@@ -13,7 +13,7 @@ public class TimelapseAlgorithm {
     private Camera camera;
 
     private double baselineExposure;
-    private static final double EPSILON = 0.1;
+    private static final double EPSILON = 0.06;
 
     public TimelapseAlgorithm(Camera camera, ExposureCalculation exposureCalculation,
                               ExposureAdjustment exposureAdjustment) {
