@@ -9,9 +9,9 @@ public interface ExposureCalculation {
 
     /**
      * Calculates the exposure of <code>image</code> represented by a <code>double</code> value with following properties.
-     * - value < 0, if the image is too dark
-     * - value > 0, if the image is too bright
-     * - value = 0, if the image is correctly exposed
+     * - 0 <= value <= 1, for any image
+     * - value = 0, if the image is black
+     * - value = 1, if the image is white
      *
      * @param image the image to calculate the exposure for
      * @return the exposure value
