@@ -18,7 +18,7 @@ public class Aperture {
     }
 
     public String toString() {
-        return "f" + value;
+        return "f/" + value;
     }
 
 }
